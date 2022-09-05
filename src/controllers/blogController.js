@@ -6,6 +6,8 @@ const createBlog = async function(req, res) {
     if(!author) {
         res.send("Author is not Present");
     }
+    if(author.isPublished) author.publishedAt=new Date()
+    if(author.isDeleted) author.deletedAt=new Date()
     let savedData = await blogModel.create(author);
     res.status(201).send({status:true , msg: savedData})
 }catch(err){
