@@ -4,12 +4,9 @@ const authControl= require("../controllers/authorController")
 const blogControl=require("../controllers/blogController")
 
 
-router.post("project-1/author", authControl.createAuthor)
+router.post("/authors", authControl.createAuthor)
 
-router.post("project-1/blog", blogControl.createBlog)
-
-
-
+router.post("/blogs", blogControl.createBlog)
 
 
 

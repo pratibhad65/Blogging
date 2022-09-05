@@ -9,7 +9,7 @@ const createBlog = async function(req, res) {
     let savedData = await blogModel.create(author);
     res.status(201).send({status:true , msg: savedData})
 }catch(err){
-    res.status(500).send({msg: err.message})
+    res.status(400).send({msg: err.message})
 }
 }
 module.exports.createBlog = createBlog
