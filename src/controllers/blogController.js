@@ -1,6 +1,8 @@
 const blogModel = require('../models/blogModel')
 const authorModel = require('../models/authorModel');
 
+//*******************************************createBlog***************************************************************** */
+
 const createBlog = async function (req, res) {
     try {
         let data = req.body
@@ -19,6 +21,8 @@ const createBlog = async function (req, res) {
     }
 }
 
+//*************************************************getBlog************************************************************* */
+
 const getBlog=async function(req,res){
     try{
         let data = req.query
@@ -33,5 +37,58 @@ const getBlog=async function(req,res){
     }
 }
 
+//*************************************************UpdateBlog****************************************************
+
+//const updateBlog = async function(req, res){
+    // try {
+    //     let blogId = req.params.blogId
+    //     let data = await blogModel.findOneAndUpdate({ _id: userId }, );
+    //     res.send({msg: data})
+    // }catch(err){
+    //     res.status(500).send({msg: err.message})
+    // }
+
+const updateBlog = async function(req, res){   
+    try {  
+        let blogId = req.params.blogId;
+        let user = await blogModel.findById(blogId);
+        //Return an error if no user with the given id exists in the db
+        if (!user) {
+          return res.status(404).send("No such user exists");
+        }
+        let data = req.body;
+        let updatedUser = await blogModel.findByIdAndUpdate(blogId,
+            { $push:{tags:data.tags,subCategory:data.subCategory},title:data.title,body:data.body,isPublished: true, publishedAt: new Date()} ,{ new: true })
+        res.status(200).send({ status: true, data: updatedUser });
+        }catch(err){
+            res.status(500).send({status: false, msg: err.message})
+        }
+        
+}
+
+const deleteBlog = async function(req, res) {
+    try{ 
+    let blogId = req.params.blogId
+    let savedData = await blogModel.findById(blogId)
+    if (!savedData) {
+        return res.status(404).send("No such blogId is present");
+      }
+    let deleted = await blogModel.findByIdAndUpdate(savedData, {$set: {isDeleted: true }},{new: true})
+    res.status(200).send({msg: deleted})
+    }catch(err){
+        res.status(500).send({status: false,  msg: err.message})
+    }
+
+}
+
+const deleteBlog2 = async function(req, res) {
+    let data = req.query
+    let deleted = await blogModel.updateMany 
+
+}
+
 module.exports.createBlog = createBlog
 module.exports.getBlog = getBlog
+module.exports.updateBlog = updateBlog
+module.exports.deleteBlog = deleteBlog
+module.exports.deleteBlog2 = deleteBlog2
