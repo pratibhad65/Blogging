@@ -12,7 +12,7 @@ const createBlog = async function (req, res) {
         if (data.isPublished) data.publishedAt = new Date()
         if (data.isDeleted) data.deletedAt = new Date()
 
-        let savedData = await blogModel.create(author);
+        let savedData = await blogModel.create(data);
         res.status(201).send({ status: true, msg: savedData })
     } catch (err) {
         res.status(500).send({ msg: err.message })
