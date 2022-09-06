@@ -4,10 +4,10 @@ const authorModel = require('../models/authorModel');
 const createBlog = async function (req, res) {
     try {
         let data = req.body
-        let ndata = data.authorId
-        let validation = await authorModel.findById(ndata)
+        let author = data.authorId
+        let validation = await authorModel.findById(author)
         if (!validation) {
-            res.send({ status: false, msg: " author is not present" })
+            res.status(400).send({ status: false, msg: " author is not present" })
         }
         if (data.isPublished) data.publishedAt = new Date()
         if (data.isDeleted) data.deletedAt = new Date()
@@ -15,7 +15,7 @@ const createBlog = async function (req, res) {
         let savedData = await blogModel.create(author);
         res.status(201).send({ status: true, msg: savedData })
     } catch (err) {
-        res.status(400).send({ msg: err.message })
+        res.status(500).send({ msg: err.message })
     }
 }
 module.exports.createBlog = createBlog
