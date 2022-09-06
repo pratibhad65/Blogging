@@ -73,7 +73,7 @@ const deleteBlog = async function(req, res) {
     if (!savedData) {
         return res.status(404).send("No such blogId is present");
       }
-    let deleted = await blogModel.findByIdAndUpdate(savedData, {$set: {isDeleted: true }},{new: true})
+    let deleted = await blogModel.findByIdAndUpdate(savedData, {$set: {isDeleted: true ,deletedAt:new Date()}},{new: true})
     res.status(200).send({msg: deleted})
     }catch(err){
         res.status(500).send({status: false,  msg: err.message})
