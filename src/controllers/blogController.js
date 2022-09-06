@@ -74,16 +74,31 @@ const deleteBlog = async function(req, res) {
         return res.status(404).send("No such blogId is present");
       }
     let deleted = await blogModel.findByIdAndUpdate(savedData, {$set: {isDeleted: true ,deletedAt:new Date()}},{new: true})
-    res.status(200).send({msg: deleted})
+    res.send({msg: deleted})
     }catch(err){
         res.status(500).send({status: false,  msg: err.message})
     }
 
 }
 
-const deleteBlog2 = async function(req, res) {
-    let data = req.query
-    let deleted = await blogModel.updateMany 
+const deleteBlogByQuery = async function (req, res) {
+    try {
+        let query = req.query
+        if (!query) return res.status(404).send("Give a query")
+
+        let find = await blogModel.findOne(query)
+
+        if (!find) return res.status(404).send("blog not found")
+
+        if (find.isDeleted == true)
+            res.status(200).send({ status: true, msg: "Blog is already Deleted" })
+
+        let update = await blogModel.findOneAndUpdate(query, { $set: { isDeleted: true, deletedAt: Date.now() } }, { new: true })
+        res.status(200).send({ msg: "Data deleted succesfully" })
+
+    } catch (err) {
+        res.status(500).send({ msg: err.message })
+    }
 
 }
 
@@ -91,4 +106,4 @@ module.exports.createBlog = createBlog
 module.exports.getBlog = getBlog
 module.exports.updateBlog = updateBlog
 module.exports.deleteBlog = deleteBlog
-module.exports.deleteBlog2 = deleteBlog2
+module.exports.deleteBlogByQuery = deleteBlogByQuery
