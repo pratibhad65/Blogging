@@ -8,6 +8,8 @@ router.post("/authors", authControl.createAuthor)
 
 router.post("/blogs", blogControl.createBlog)
 
+router.get("/blog", blogControl.getBlog)
+
 
 
 module.exports = router;

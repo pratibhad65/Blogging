@@ -18,4 +18,20 @@ const createBlog = async function (req, res) {
         res.status(500).send({ msg: err.message })
     }
 }
+
+const getBlog=async function(req,res){
+    try{
+        let data = req.query
+        let Blogs=await blogModel.find({isDeleted:false, isPublished: true , ...data})
+        if(!Blogs){
+            res.status(404).send({status: false,  msg: "Not found"})
+        }
+        res.status(200).send({status: true, msg:Blogs})
+    
+    }catch (err) {
+        res.status(500).send({ msg: err.message })
+    }
+}
+
 module.exports.createBlog = createBlog
+module.exports.getBlog = getBlog
