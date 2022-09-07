@@ -21,6 +21,7 @@ const createBlog = async function (req, res) {
     }
 }
 
+
 //*************************************************getBlog************************************************************* */
 
 const getBlog=async function(req,res){
