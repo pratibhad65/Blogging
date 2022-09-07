@@ -18,7 +18,7 @@ const loginUser = async function (req, res) {
   
       let author = await authorModel.findOne({ email: authorName, password: password });
       if (!(authorName && password))
-        return res.status(400).send({
+        return res.status(401).send({
           status: false,
           msg: "please enter userName and password"
         });
