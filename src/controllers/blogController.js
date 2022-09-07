@@ -86,7 +86,7 @@ const deleteBlogByQuery = async function (req, res) {
         let query = req.query
         if (!query) return res.status(404).send("Give a query")
 
-        let find = await blogModel.findOne(query)
+        let find = await blogModel.find(query)
 
         if (!find) return res.status(404).send("blog not found")
 
