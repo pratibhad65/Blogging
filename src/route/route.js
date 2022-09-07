@@ -16,5 +16,7 @@ router.delete("/deleteBlog/:blogId",blogControl.deleteBlog)
 
 router.delete("/deleteBlogByQuery",blogControl.deleteBlogByQuery)
 
+router.post("/login",authControl.loginAuthor)
+
 
 module.exports = router;

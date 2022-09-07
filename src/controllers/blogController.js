@@ -65,6 +65,7 @@ const updateBlog = async function(req, res){
         }
         
 }
+//*********************************************************DeleteBlogByParam****************************************************************/
 
 const deleteBlog = async function(req, res) {
     try{ 
@@ -80,6 +81,7 @@ const deleteBlog = async function(req, res) {
     }
 
 }
+//*******************************************************DeleteBlogByQuery********************************************************************/
 
 const deleteBlogByQuery = async function (req, res) {
     try {
