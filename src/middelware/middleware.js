@@ -1,45 +1,42 @@
-
 const jwt = require("jsonwebtoken");
 
 
-const authentication = async function (req, res, next) {
+
+
+//*********************************************AUTHENTICATION************************************************************************
+
+const authentication = function (req, res, next) {
     try {
         let token = req.headers["x-api-key"];
-        if (!token) { return res.status(401).send({ status: false, msg: "token must be present" }) };
-        next()
-    }
-    catch (error) {
-        res.status(500).send({ error: error.message })
-    }
-}
-
-const authorization = async function (req, res, next) {
-    try {
-
-        let token = req.headers["x-api-key"];
-        if (!token) {
-            res.status(401).send({ status: false, msg: "token must be present" })
-        }
-        let decodedToken = jwt.verify(token, "functionup-plutonium-project-key");
-
-        if (!decodedToken)
+        if (!token) return res.status(401).send({ status: false, msg: "token must be present" });
+        let decodedToken = jwt.verify(token, "functionup-plutonium-project-key")
+        //req.decodedToken = decodedToken
+        if (!decodedToken) {
             return res.status(403).send({ status: false, msg: "token is invalid" });
-        let authorId = req.params.authorId;
-        let userDetails = await authorModel.findById(authorId);
-        if (!userDetails)
-            return res.status(404).send({ status: false, msg: "No such user exists" });
-            next();
+        }
+        next()
+    } catch (err) {
+        res.status(500).send({ status: false, msg: err.message })
     }
-    catch (error) {
-        res.status(500).send({ error: error.message })
+}
+
+//*********************************************AUTHORIZATION************************************************************************
+
+const authorization = function (req, res, next) {
+    try {
+        let loggedInAuthorId = decodedToken.authorId                                           //req.decodedToken.authorId
+        let requestAuthorId = req.params.authorId
+        if (requestAuthorId != loggedInAuthorId) {
+            return res.status(403).send({ status: false, message: "no permission" })
+        }
+        next()
+    } catch (err) {
+        res.status(500).send({ status: false, msg: err.message })
     }
 }
 
 
 
 
-
-
-
-module.exports.authentication = authentication
 module.exports.authorization = authorization
+module.exports.authentication = authentication

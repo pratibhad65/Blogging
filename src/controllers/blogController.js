@@ -1,11 +1,22 @@
 const blogModel = require('../models/blogModel')
 const authorModel = require('../models/authorModel');
 
+
+const isValidRequestBody=function(requestBody){
+    return Object.keys(requestBody).length>0;
+  };
+
+
 //*******************************************createBlog***************************************************************** */
 
 const createBlog = async function (req, res) {
     try {
         let data = req.body
+        if(!isValidRequestBody(data)){
+            return res.status(400).send({status:false,msg:"invalid"})
+          }
+            if (!data)return res.status(400).send({status:false,msg:"enter data"})
+        
         let author = data.authorId
         let validation = await authorModel.findById(author)
         if (!validation) {
@@ -55,7 +66,7 @@ const updateBlog = async function(req, res){
         let user = await blogModel.findById(blogId);
         //Return an error if no user with the given id exists in the db
         if (!user) {
-          return res.status(404).send("No such user exists");
+          return res.status(404).send("No such user exists");//
         }
         let data = req.body;
         let updatedUser = await blogModel.findByIdAndUpdate(blogId,
