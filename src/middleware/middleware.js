@@ -14,29 +14,39 @@ const authentication = function (req, res, next) {
         if (!decodedToken) {
             return res.status(403).send({ status: false, msg: "token is invalid" });
         }
-        next()
-    } catch (err) {
-        res.status(500).send({ status: false, msg: err.message })
+        let bodyAuthorId = req.body.authorId;
+        if (bodyAuthorId) {
+            if (bodyAuthorId != decodedToken.authorId)
+                return res.status(400).send({
+                    status: false,
+                    message: "Provided authorId is not same as logined auhorId",
+                });
+            }
+
+            next()
+        } catch (err) {
+            res.status(500).send({ status: false, msg: err.message })
+        }
     }
-}
+
 
 //*********************************************AUTHORIZATION************************************************************************
 
 const authorization = function (req, res, next) {
-    try {
-        let loggedInAuthorId = decodedToken.authorId                                           //req.decodedToken.authorId
-        let requestAuthorId = req.params.authorId
-        if (requestAuthorId != loggedInAuthorId) {
-            return res.status(403).send({ status: false, message: "no permission" })
+        try {
+            let loggedInAuthorId = decodedToken.authorId                                           //req.decodedToken.authorId
+            let requestAuthorId = req.params.authorId
+            if (requestAuthorId != loggedInAuthorId) {
+                return res.status(403).send({ status: false, message: "no permission" })
+            }
+            next()
+        } catch (err) {
+            res.status(500).send({ status: false, msg: err.message })
         }
-        next()
-    } catch (err) {
-        res.status(500).send({ status: false, msg: err.message })
     }
-}
 
 
 
 
-module.exports.authorization = authorization
-module.exports.authentication = authentication
+    module.exports.authorization = authorization
+    module.exports.authentication = authentication
