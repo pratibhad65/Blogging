@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authControl= require("../controllers/authorController")
 const blogControl=require("../controllers/blogController")
-const middlewareCV=require("../middelware/middleware")
+const middlewareCV=require("../middleware/middleware")
 
 
 router.post("/authors", authControl.createAuthor)

@@ -51,14 +51,6 @@ const getBlog=async function(req,res){
 
 //*************************************************UpdateBlog****************************************************
 
-//const updateBlog = async function(req, res){
-    // try {
-    //     let blogId = req.params.blogId
-    //     let data = await blogModel.findOneAndUpdate({ _id: userId }, );
-    //     res.send({msg: data})
-    // }catch(err){
-    //     res.status(500).send({msg: err.message})
-    // }
 
 const updateBlog = async function(req, res){   
     try {  
@@ -108,7 +100,7 @@ const deleteBlogByQuery = async function (req, res) {
             res.status(200).send({ status: true, msg: "Blog is already Deleted" })
 
         let update = await blogModel.updateMany(query, { $set: { isDeleted: true, deletedAt: Date.now() } }, { new: true })
-        res.status(200).send({ msg: "Data deleted succesfully" })
+        res.status(200).send({ msg: "Data deleted successfully" })
 
     } catch (err) {
         res.status(500).send({ msg: err.message })
