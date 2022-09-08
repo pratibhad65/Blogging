@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authControl= require("../controllers/authorController")
 const blogControl=require("../controllers/blogController")
-const middlewareCV=require("../middelware/middleware")
+const middlewareCV=require("../middleware/middleware")
 
 
 router.post("/authors", authControl.createAuthor)
@@ -17,7 +17,7 @@ router.delete("/deleteBlog/:blogId",middlewareCV.authentication,middlewareCV.aut
 
 router.delete("/deleteBlogByQuery",middlewareCV.authentication,middlewareCV.authorization,blogControl.deleteBlogByQuery)
 
-router.post("/login",middlewareCV.authentication,middlewareCV.authorization,authControl.loginAuthor)
+router.post("/login",authControl.loginAuthor)
 
 
 module.exports = router;

@@ -1,11 +1,22 @@
 const blogModel = require('../models/blogModel')
 const authorModel = require('../models/authorModel');
 
+
+const isValidRequestBody=function(requestBody){
+    return Object.keys(requestBody).length>0;
+  };
+
+
 //*******************************************createBlog***************************************************************** */
 
 const createBlog = async function (req, res) {
     try {
         let data = req.body
+        if(!isValidRequestBody(data)){
+            return res.status(400).send({status:false,msg:"invalid"})
+          }
+            if (!data)return res.status(400).send({status:false,msg:"enter data"})
+        
         let author = data.authorId
         let validation = await authorModel.findById(author)
         if (!validation) {
@@ -40,14 +51,6 @@ const getBlog=async function(req,res){
 
 //*************************************************UpdateBlog****************************************************
 
-//const updateBlog = async function(req, res){
-    // try {
-    //     let blogId = req.params.blogId
-    //     let data = await blogModel.findOneAndUpdate({ _id: userId }, );
-    //     res.send({msg: data})
-    // }catch(err){
-    //     res.status(500).send({msg: err.message})
-    // }
 
 const updateBlog = async function(req, res){   
     try {  
@@ -55,7 +58,7 @@ const updateBlog = async function(req, res){
         let user = await blogModel.findById(blogId);
         //Return an error if no user with the given id exists in the db
         if (!user) {
-          return res.status(404).send("No such user exists");
+          return res.status(404).send("No such user exists");//
         }
         let data = req.body;
         let updatedUser = await blogModel.findByIdAndUpdate(blogId,
@@ -97,7 +100,7 @@ const deleteBlogByQuery = async function (req, res) {
             res.status(200).send({ status: true, msg: "Blog is already Deleted" })
 
         let update = await blogModel.updateMany(query, { $set: { isDeleted: true, deletedAt: Date.now() } }, { new: true })
-        res.status(200).send({ msg: "Data deleted succesfully" })
+        res.status(200).send({ msg: "Data deleted successfully" })
 
     } catch (err) {
         res.status(500).send({ msg: err.message })
