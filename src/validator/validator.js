@@ -1,4 +1,4 @@
-const {default: mongoose, isObjectIdOrHexString } = require('mongoose')
+const {default: mongoose} = require('mongoose')
 
 const isValidEmail = function (mail) {
     if (/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(mail)) {

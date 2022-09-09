@@ -34,8 +34,10 @@ const authentication = function (req, res, next) {
 
 const authorization = function (req, res, next) {
         try {
+            let token = req.headers["x-api-key"];
+            let decodedToken = jwt.verify(token, "functionUp-plutonium-project-key")
             let loggedInAuthorId = decodedToken.authorId                                           //req.decodedToken.authorId
-            let requestAuthorId = req.params.authorId
+            let requestAuthorId = req.query.authorId
             if (requestAuthorId != loggedInAuthorId) {
                 return res.status(403).send({ status: false, message: "no permission" })
             }
