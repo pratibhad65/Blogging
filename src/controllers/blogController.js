@@ -104,7 +104,7 @@ const updateBlog = async function (req, res) {
 
         ///edgeCase 4 ...body content should be greater than 50
         if (body) {
-            if (body.length < 50)
+            if (body.length < 5)
                 return res.status(400).send({ statut: false, msg: "body content is too short...add some more content", });
         }
 
