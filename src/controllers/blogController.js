@@ -60,23 +60,10 @@ const getBlog = async function (req, res) {
         let data = req.query
         let { authorId } = data;
 
-<<<<<<< HEAD
-    //edgeCase - 1 if authorId is given then is it valid or not
-    if (authorId) {
-      if (!validator.isValidId(authorId))
-        return res.status(400).send({ status: false, msg: "Not a valid authorId" });
-    }
-        let Blogs=await blogModel.find({ $and: [data, {  title: "abc" }], });
-
-        //edgeCase-2
-        if(!Blogs){
-            res.status(404).send({status: false,  msg: "Blog Not found"})
-=======
         //edgeCase - 1 if authorId is given then is it valid or not
         if (authorId) {
             if (!validator.isValidId(authorId))
                 return res.status(400).send({ status: false, msg: "Not a valid authorId" });
->>>>>>> 3b84f86c1b3cd98a8e867f89fed8762e4274f082
         }
         let Blogs = await blogModel.find({ isDeleted: false, isPublished: true, ...data })
 
