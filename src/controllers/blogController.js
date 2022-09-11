@@ -39,10 +39,20 @@ const createBlog = async function (req, res) {
                 statut: false,
                 msg: "body content is too short...add some more content",
             });
+        //edgeCase6 --tag is valid or not
+        if (tags) {
+            let verifyTags = validator.isValidName(verifyTags);
+            if (!verifyTags) return res.status(400).send({ status: false, msg: " Tags is not valid" })
+        }
 
         //edgeCase6 - is body data present or not
         if (!category || category.length == 0)
             return res.status(400).send({ statut: false, msg: "Category is must" });
+        if (category) {
+            let verifyCategory = validator.isValidName(category);
+            if (!verifyCategory) return res.status(400).send({ status: false, msg: " category is not valid" })
+        }
+
         if (data.isPublished) data.publishedAt = new Date()
         if (data.isDeleted) data.deletedAt = new Date()
 
@@ -115,6 +125,7 @@ const updateBlog = async function (req, res) {
         }
 
         if (title || body || tags || subcategory) {
+
             let updatedUser = await blogModel.findByIdAndUpdate(blogId,
                 { $push: { tags: data.tags, subCategory: data.subCategory }, title: data.title, body: data.body, isPublished: true, publishedAt: new Date() }, { new: true })
             res.status(200).send({ status: true, data: updatedUser });
