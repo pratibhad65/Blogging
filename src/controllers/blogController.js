@@ -6,7 +6,7 @@ const validator = require("../validator/validator");
 const createBlog = async function (req, res) {
     try {
         let data = req.body
-        let { authorId, title, body, category, isPublished } = data;
+        let { authorId, title, body, tags, category, subCategory } = data;
 
         if (!validator.isValidBody(data)) {
             //checking that body is empty or not
@@ -28,29 +28,35 @@ const createBlog = async function (req, res) {
 
         //edgeCase4 - is title present or not
         if (!title)
-            return res.status(400).send({ statut: false, msg: "Title is required" });
+            return res.status(400).send({ status: false, msg: "Title is required" });
 
         //edgeCase5 - is body data present or not
         if (!body)
-            return res.status(400).send({ statut: false, msg: "Body content is a mandatory part" });
+            return res.status(400).send({ status: false, msg: "Body content is a mandatory part" });
         //content should be more than 100 characters
         if (body.length < 5)
             return res.status(400).send({
-                statut: false,
+                status: false,
                 msg: "body content is too short...add some more content",
             });
         //edgeCase6 --tag is valid or not
         if (tags) {
-            let verifyTags = validator.isValidName(verifyTags);
+            let verifyTags = validator.isValidName(tags);
             if (!verifyTags) return res.status(400).send({ status: false, msg: " Tags is not valid" })
         }
 
-        //edgeCase6 - is body data present or not
+        //edgeCase7 - is body data present or not
         if (!category || category.length == 0)
             return res.status(400).send({ statut: false, msg: "Category is must" });
         if (category) {
             let verifyCategory = validator.isValidName(category);
             if (!verifyCategory) return res.status(400).send({ status: false, msg: " category is not valid" })
+        }
+
+        // edgeCase8 --is sub category valid or not
+        if (subCategory) {
+            let subCategory1 = validator.isValidName(subCategory);
+            if (!subCategory1) return res.status(400).send({ status: false, msg: " sub category is not valid" })
         }
 
         if (data.isPublished) data.publishedAt = new Date()
