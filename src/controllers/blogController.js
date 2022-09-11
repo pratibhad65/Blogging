@@ -74,7 +74,7 @@ const createBlog = async function (req, res) {
 const getBlog = async function (req, res) {
     try {
         let data = req.query
-        let { authorId } = data;
+        let { authorId,category,tags,subCategory } = data;
 
         //edgeCase - 1 if authorId is given then is it valid or not
         if (authorId) {
