@@ -15,7 +15,7 @@ const createBlog = async function (req, res) {
 
         //edgeCase1 - 
         if (!authorId)
-            return res.status(400).send({ statut: false, msg: "AuthorId is required" });
+            return res.status(400).send({ status: false, msg: "AuthorId is required" });
 
         // edgeCase2- 
         if (!validator.isValidId(authorId))
@@ -47,7 +47,7 @@ const createBlog = async function (req, res) {
 
         //edgeCase7 - is body data present or not
         if (!category || category.length == 0)
-            return res.status(400).send({ statut: false, msg: "Category is must" });
+            return res.status(400).send({ status: false, msg: "Category is must" });
         if (category) {
             let verifyCategory = validator.isValidName(category);
             if (!verifyCategory) return res.status(400).send({ status: false, msg: " category is not valid" })
@@ -84,6 +84,26 @@ const getBlog = async function (req, res) {
         let Blogs = await blogModel.find({ isDeleted: false, isPublished: true, ...data })
 
         //edgeCase - 2
+        if (!category || category.length == 0)
+            return res.status(400).send({ statut: false, msg: "Category is must" });
+        if (category) {
+            let verifyCategory = validator.isValidName(category);
+            if (!verifyCategory) return res.status(400).send({ status: false, msg: " category is not valid" })
+        }
+
+        //edgeCase - 3
+        if (tags) {
+            let verifyTags = validator.isValidName(tags);
+            if (!verifyTags) return res.status(400).send({ status: false, msg: " Tags is not valid" })
+        }
+
+        //edgeCase - 4
+        if (subCategory) {
+            let subCategory1 = validator.isValidName(subCategory);
+            if (!subCategory1) return res.status(400).send({ status: false, msg: " sub category is not valid" })
+        }
+
+        //edgeCase - 5
         if (Blogs.length == 0)
             return res.status(404).send({ status: false, msg: "No data found for given user" });
         res.status(200).send({ status: true, msg: Blogs })

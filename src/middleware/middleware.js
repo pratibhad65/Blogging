@@ -13,17 +13,7 @@ const authentication = function (req, res, next) {
         //req.decodedToken = decodedToken
         if (!decodedToken) {
             return res.status(403).send({ status: false, msg: "token is invalid" });
-        }
-        let bodyAuthorId = req.body.authorId;
-        if (bodyAuthorId) {
-            if (bodyAuthorId != decodedToken.authorId)
-                return res.status(400).send({
-                    status: false,
-                    message: "Provided authorId is not same as logined auhorId",
-                });
-            }
-
-            next()
+        }next()
         } catch (err) {
             res.status(500).send({ status: false, msg: err.message })
         }
@@ -32,20 +22,28 @@ const authentication = function (req, res, next) {
 
 //*********************************************AUTHORIZATION************************************************************************
 
-const authorization = function (req, res, next) {
-        try {
-            let token = req.headers["x-api-key"];
-            let decodedToken = jwt.verify(token, "functionUp-plutonium-project-key")
-            let loggedInAuthorId = decodedToken.authorId                                           //req.decodedToken.authorId
-            let requestAuthorId = req.query.authorId
-            if (requestAuthorId != loggedInAuthorId) {
-                return res.status(403).send({ status: false, message: "no permission" })
-            }
+const authorization = async function (req, res, next) {
+    try {
+
+        let blogId = req.params.blogId
+        let decodeToken = jwt.verify(token, "functionUp-plutonium-project-key")
+        let userLoggedIn = decodeToken.userId.toString()
+        if (blogId) {
+        let author = await blog.findById(blogId).select({ authorId: 1, _id: 0 })
+        let userToBeModified = author.authorId.toString()
+        if (userToBeModified != userLoggedIn) return res.status(403).send({ status: false, msg: 'User logged is not allowed to modify the requested users data' })
+        next()
+        } else {
+            let authorId = req.query.authorId
+            if (authorId != userLoggedIn) return res.status(403).send({ status: false, msg: 'User logged is not allowed to modify the requested users data' })
             next()
-        } catch (err) {
-            res.status(500).send({ status: false, msg: err.message })
-        }
+            
+        } 
+        
+    } catch (err) {
+        res.status(500).send({ msg: "ERROR", error: err.message })
     }
+}
 
 
 

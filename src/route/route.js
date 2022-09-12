@@ -9,13 +9,13 @@ router.post("/authors", authControl.createAuthor)
 
 router.post("/blogs",middlewareCV.authentication,blogControl.createBlog)
 
-router.get("/blog",middlewareCV.authentication, blogControl.getBlog)
+router.get("/blogs",middlewareCV.authentication, blogControl.getBlog)
 
-router.put("/update/:blogId",middlewareCV.authentication,middlewareCV.authorization, blogControl.updateBlog)
+router.put("/blogs/:blogId",middlewareCV.authentication,middlewareCV.authorization, blogControl.updateBlog)
 
-router.delete("/deleteBlog/:blogId",middlewareCV.authentication,middlewareCV.authorization,blogControl.deleteBlog)
+router.delete("/blogs/:blogId",middlewareCV.authentication,middlewareCV.authorization,blogControl.deleteBlog)
 
-router.delete("/deleteBlogByQuery",middlewareCV.authentication,middlewareCV.authorization,blogControl.deleteBlogByQuery)
+router.delete("/blogs",middlewareCV.authentication,middlewareCV.authorization,blogControl.deleteBlogByQuery)
 
 router.post("/login",authControl.loginAuthor)
 

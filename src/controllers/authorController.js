@@ -14,7 +14,7 @@ const createAuthor = async function (req, res) {
         //edge case-1 
         let isEmptyBody = validator.isValidBody(data);
         if(!isEmptyBody){
-            return res.status(400).send({status: false, msg: "request body can be empty"})
+            return res.status(400).send({status: false, msg: "request body cannot be empty"})
         }
         //edge case-2
         if (!fname) { return res.status(400).send({ status: false, msg: "fname is required" }) }
@@ -27,7 +27,7 @@ const createAuthor = async function (req, res) {
        if (!lname) { return res.status(400).send({ status: false, msg: "lname is required" }) }
        if(lname) {
            let verifyName = validator.isValidName(lname);
-           if(!verifyName) return res.status(400).send({status: false, msg: "last name is not valid"})
+           if(!verifyName(email.trim())) return res.status(400).send({status: false, msg: "last name is not valid"})
        }
 
        //edge case 4
@@ -41,7 +41,7 @@ const createAuthor = async function (req, res) {
        //edge case-5 
         if (!email) { return res.status(400).send({ status: false, msg: "email is required" }) }
         if (email) {
-            let verifyEmail = validator.isValidEmail(email.trim());
+            let verifyEmail = validator.isValidEmail(email);
             if (!verifyEmail)
               return res.status(400).send({
                 status: false,
@@ -115,4 +115,6 @@ const loginUser = async function (req, res) {
 };
 module.exports.createAuthor = createAuthor
 module.exports.loginAuthor = loginUser
+
+
 
