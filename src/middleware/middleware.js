@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
-
-
-
+const blogModel = require('../models/blogModel')
+const authorModel = require('../models/authorModel');
 
 //*********************************************AUTHENTICATION************************************************************************
 
@@ -25,11 +24,12 @@ const authentication = function (req, res, next) {
 const authorization = async function (req, res, next) {
     try {
 
+        let token = req.headers["x-api-key"];
         let blogId = req.params.blogId
         let decodeToken = jwt.verify(token, "functionUp-plutonium-project-key")
-        let userLoggedIn = decodeToken.userId.toString()
+        let userLoggedIn = decodeToken.authorId.toString()
         if (blogId) {
-        let author = await blog.findById(blogId).select({ authorId: 1, _id: 0 })
+        let author = await blogModel.findById(blogId).select({ authorId: 1, _id: 0 })
         let userToBeModified = author.authorId.toString()
         if (userToBeModified != userLoggedIn) return res.status(403).send({ status: false, msg: 'User logged is not allowed to modify the requested users data' })
         next()
