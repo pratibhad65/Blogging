@@ -27,7 +27,7 @@ const createAuthor = async function (req, res) {
        if (!lname) { return res.status(400).send({ status: false, msg: "lname is required" }) }
        if(lname) {
            let verifyName = validator.isValidName(lname);
-           if(!verifyName(email.trim())) return res.status(400).send({status: false, msg: "last name is not valid"})
+           if(!verifyName) return res.status(400).send({status: false, msg: "last name is not valid"})
        }
 
        //edge case 4
