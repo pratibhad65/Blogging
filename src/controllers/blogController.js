@@ -127,27 +127,22 @@ const updateBlog = async function (req, res) {
         if (!validator.isValidId(blogId))
             return res.status(400).send({ status: false, message: "Not a valid blogId" });
 
-        // edge case 2 ------ No found 
-
-        let checkBlog = await blogModel.findOne({ _id: blogId });
-        if (!checkBlog)
-            return res.status(400).send({ status: false, msg: "No blog found with given Id to update" });
-
-        // edge case 3 -----No provided data
+       
+        // edge case 2 -----No provided data
         let emptyBody = validator.isValidBody(data);
         if (!emptyBody)
             return res.status(400).send({ status: false, msg: "You have not provided any data" });
 
-        ///edgeCase 4 ...body content should be greater than 50
+        ///edgeCase 3...body content should be greater than 50
         if (body) {
             if (body.length < 5)
                 return res.status(400).send({ statut: false, msg: "body content is too short...add some more content", });
         }
 
-        //edgeCase 5 -- if title is present than it should not be empty
+        //edgeCase 4 -- if title is present than it should not be empty
         if (title != null) {
             if (title.length == 0)
-                return res.status(400).send({ statut: false, msg: "Title is is used but it is empty" });
+                return res.status(400).send({ statut: false, msg: "Title is used but it is empty" });
         }
 
         if (title || body || tags || subcategory) {
@@ -171,15 +166,12 @@ const deleteBlog = async function (req, res) {
         if (!validator.isValidId(blogId))
             return res.status(400).send({ status: false, msg: "Invalid blogId" });
 
-        // is blog present ith given blogId
         let savedData = await blogModel.findById(blogId)
-        if (!savedData) {
-            return res.status(404).send("No such blogId is present");
-        }
+       
         //if it is already deleted
 
         if (savedData.isDeleted)
-            return res.status(404).send({ status: false, msg: "Blog not found may you have already delted :)", });
+            return res.status(404).send({ status: false, msg: "Blog not found may you have already deleted :)", });
 
         let updatedata = await blogModel.findByIdAndUpdate(savedData, { $set: { isDeleted: true, deletedAt: new Date() } }, { new: true });
         res.status(200).send();
